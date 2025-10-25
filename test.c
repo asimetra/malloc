@@ -1,16 +1,15 @@
 #include "malloc.h"
 
-typedef struct {
-    char chars[3];
-    int number;
-} MyStruct;
-
 
 #include <stdio.h>
+#include <limits.h>
+
 int main(void)
 {
-    MyStruct *ptr = (MyStruct *)malloc(sizeof(MyStruct) * 5);
-    printf("Sizeof: %d\n", sizeof(MyStruct));
-    free(ptr);
+    unsigned long *ptr = *(unsigned long *)ULONG_MAX;
+
+    printf("Pointer address: %p\n", (void *)ptr);
+    printf("Value: %ld\n", *ptr);
+
     return (0);
 }
