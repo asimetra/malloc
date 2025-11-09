@@ -1,15 +1,15 @@
 #include "malloc.h"
-
 #include <assert.h>
 
-#define MAGIC_NUMBER 0x12345678 /*XXX Magic number for header*/
+#include <stdlib.h>
 
-typedef struct __header_t {
-    int size;
-    int magic;
-} header_t;
+static arena_t *arena = NULL;
 
-void    *malloc(size_t __size) { (void)__size;return NULL; }
+
+
+void    *malloc(size_t __size) {
+   (void)__size;return NULL;
+}
 
 void    free (void *__ptr) {
     header_t *hptr = (void *)__ptr - sizeof(header_t);
@@ -17,3 +17,9 @@ void    free (void *__ptr) {
 }
 
 /*Splitting and coalescing functions for memory blocks*/
+
+int    add_chunk(chunk_t **head, chunk_t *new_chunk) {
+    (void)head;
+    (void)new_chunk;
+    return 0;
+}
