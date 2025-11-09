@@ -25,9 +25,6 @@ typedef struct chunk {
     chunk_pair_t    free_link;
 } chunk_t;
 
-static chunk_t  *top_chunk = NULL;
-static chunk_t  *bin_chunks[128] = {0};
-
 /* Chunk Utils */
 chunk_t *new_chunk(arena_t *arena, size_t size);
 chunk_t *find_free_chunk(chunk_t **head);

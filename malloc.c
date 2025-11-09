@@ -3,7 +3,8 @@
 
 #include <stdlib.h>
 
-static arena_t *arena = NULL;
+static chunk_t  *top_chunk = NULL;
+static chunk_t  *bin_chunks[128] = {0};
 
 
 
