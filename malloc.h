@@ -10,14 +10,13 @@
 #define SELF_MMAPED(x) ((x) & (1 >> 0))
 #define CHUNK_SIZE(x)  ((x) &  ~(size_t)0b11)
 
-#define mem2chunk(size) ((size + 15) & ~15) // (x + maskj) & ~mask
-#define chunk2idx(size) ((size >> 4) - 1)
+#define mem2chunk(size) ((size + 15) & ~15) // (x + mask) & ~mask
+#define chunk2idx(size) ((size >> 4) - 2) /*(size / 16) - 2 cuz we start at 32 bytes */
 
 /*i just yoinked from glibc*/
 #define MMAP_MAX 65536
 #define MMAP_THRESHOLD  (128 * 1024)
 #define MAX_ALIGNMENT 16
-
 
 typedef struct chunk;
 

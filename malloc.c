@@ -6,15 +6,19 @@
 static chunk_t  *top_chunk = NULL;
 static chunk_t  *bin_chunks[128] = {0};
 
-
-
 void    *malloc(size_t __size) {
-   (void)__size;return NULL;
+    size_t  chunk_size;
+
+    chunk_size = mem2chunk(__size + sizeof(header_t));
+    if (chunk_size >= MMAP_MAX)
+        return NULL;
+    if (top_chunk == NULL)
+        ; // init top_chunk
+   return NULL;
 }
 
 void    free (void *__ptr) {
-    header_t *hptr = (void *)__ptr - sizeof(header_t);
-    assert(hptr->magic == MAGIC_NUMBER);
+    // header_t *hptr = (void *)__ptr - sizeof(header_t);
 }
 
 /*Splitting and coalescing functions for memory blocks*/

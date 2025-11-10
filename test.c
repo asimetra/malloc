@@ -1,10 +1,9 @@
-#include "malloc.h"
 
 
-// #include <stdio.h>
+#include <stdio.h>
 // #include <limits.h>
 #include <unistd.h>
-
+       #include <stdlib.h>
 // int main(void)
 // {
 //     void *ptr = mmap(NULL, 4096*5, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
@@ -34,8 +33,8 @@
 // }
 
 
-int main(void) {
+int main(int argc, char **argv) {
 
-    printf("%x\n", 0xfffffff - 0x01010101);
+    printf("%d\n", (atoi(argv[1]) + 15) & ~15);
     return (0);
 }
