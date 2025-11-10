@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <unistd.h>
 #include <sys/mman.h>
+#include <errno.h>
 #include <stdio.h>
 
 #define IN_USE(x)      ((x) & (1 >> 1))
@@ -34,6 +35,12 @@ typedef struct chunk {
     header_t        header;
     chunk_pair_t    free_link;
 } chunk_t;
+
+typedef struct arena {
+    chunk_t         *top_chunk;
+    size_t          size;
+} arena_t;
+
 
 /* Chunk Utils */
 // chunk_t *new_chunk(arena_t *arena, size_t size);
