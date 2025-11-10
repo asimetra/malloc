@@ -35,6 +35,8 @@
 
 int main(int argc, char **argv) {
 
+    if (malloc(0) == NULL)
+        printf("NULL\n");
     printf("%d\n", (atoi(argv[1]) + 15) & ~15);
     return (0);
 }

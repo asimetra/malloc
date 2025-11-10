@@ -6,14 +6,21 @@
 static chunk_t  *top_chunk = NULL;
 static chunk_t  *bin_chunks[128] = {0};
 
+void    *__mmap(size_t __len, int __prot) {
+    if (top_chunk != NULL)
+        ;/*add leftover to free_list*/
+    return mmap(NULL, __len, __prot, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+};
+
+
 void    *malloc(size_t __size) {
     size_t  chunk_size;
 
     chunk_size = mem2chunk(__size + sizeof(header_t));
-    if (chunk_size >= MMAP_MAX)
+    if (chunk_size >= MMAP_MAX || chunk_size == 0)
         return NULL;
     if (top_chunk == NULL)
-        ; // init top_chunk
+        top_chunk =__mmap(MMAP_MAX, PROT_READ | PROT_WRITE);
    return NULL;
 }
 
