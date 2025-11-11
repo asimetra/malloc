@@ -14,6 +14,7 @@ $(NAME): $(OBJS)
 
 test : all
 	gcc  test.c -o test -L. -lmalloc
+	
 
 clean:
 	rm -f $(OBJS)

@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <unistd.h>
 #include <sys/mman.h>
+#include <stdbool.h>
 #include <errno.h>
 #include <stdio.h>
 
@@ -13,17 +14,18 @@
 
 #define mem2chunk(size) ((size + 15) & ~15) // (x + mask) & ~mask
 #define chunk2idx(size) ((size >> 4) - 2) /*(size / 16) - 2 cuz we start at 32 bytes */
+#define idx2chunk(size) (((size) + 2) << 4)
 
 /*i just yoinked from glibc*/
 #define MMAP_MAX 65536
 #define MMAP_THRESHOLD  (128 * 1024)
 #define MAX_ALIGNMENT 16
 
-typedef struct chunk;
+typedef struct chunk chunk_t;
 
 typedef struct chunk_pair {
-    struct chunk *prev;
-    struct chunk *next;
+    struct chunk_t *prev;
+    struct chunk_t *next;
 } chunk_pair_t;
 
 typedef struct chunk_header {
