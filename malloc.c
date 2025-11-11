@@ -43,12 +43,18 @@ void	_unlink_chunk(chunk_t *chunk) {
 
 	prev = chunk->free_link.prev;
 	next = chunk->free_link.next;
-	if (prev != NULL)
+	if (prev != NULL) {
 		prev->free_link.next = next;
+	} else {
+		bin_chunks[chunk2idx(CHUNK_SIZE(chunk->header.size))] = next;
+	}
 	if (next != NULL)
 		next->free_link.prev = prev;
 }
-void	_prepend_chunk_in_bin(chunk_t *chunk) {};
+
+void	_prepend_chunk_in_bin(chunk_t *chunk) {
+
+};
 
 
 
