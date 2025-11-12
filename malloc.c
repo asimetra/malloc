@@ -73,17 +73,14 @@ static void *_create_arena(size_t size) {
 }
 
 static void	*__malloc(size_t size, arena_t *arena) {
-    size_t  chunk_size;
-    
-    chunk_size = mem2chunk(size + sizeof(header_t));
     if (size == 0 || size > MMAP_THRESHOLD) {
         return NULL;
-    } else if (chunk_size > MMAP_MAX) {
-        return  _create_arena(chunk_size);
+	} else if (size > MMAP_MAX) {
+        return  _create_arena(mem2arena(size + sizeof(header_t))));
     } else if (arena->top_chunk == NULL && !_init_arena(arena)) {
         return NULL;
     }
-	return _get_chunk(arena, chunk_size);
+	return _get_chunk(arena, mem2chunk(size + sizeof(header_t)));
 }
 
 void    *malloc(size_t __size) {

@@ -2,8 +2,9 @@
 
 #include <stdio.h>
 #include <stddef.h>
+ #include <unistd.h>
 
 int main(void) {
-    printf("%zu\n", _Alignof(max_align_t));
+    printf("%d\n",  #define mem2chunk(size) ((size + 15) & ~15());
     return 0;
 }

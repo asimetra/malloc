@@ -7,10 +7,11 @@ OBJS    = $(SRCS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -g -o $@ $^
 
 test : all
-	gcc  test.c -o test -L. -lmalloc
+	export LD_LIBRARY_PATH="$PWD"
+	gcc  test.c -o test -L. -lmalloc -g 
 	
 clean:
 	rm -f $(OBJS)
