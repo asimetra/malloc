@@ -1,6 +1,5 @@
 #include "malloc.h"
 #include <assert.h>
-
 #include <stdlib.h>
 
 static arena_t  g_arena = {0};
@@ -8,13 +7,13 @@ static chunk_t  *bin_chunks[128] = {0};
 
 static void    *__mmap(size_t __len, int __prot) {
     return mmap(NULL, __len, __prot, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-};
+}
 
 static bool  _init_arena(arena_t *arena) {
     void	*top_chunk;
 
     top_chunk = __mmap(MMAP_MAX, PROT_READ | PROT_WRITE);
-    if (top_chunk == NULL) {
+    if (top_chunk == MAP_FAILED) {
         return false;
     }
     *arena = (arena_t){
@@ -24,20 +23,20 @@ static bool  _init_arena(arena_t *arena) {
     return true;
 }
 
-static chunk_t  *find_free_chunk(size_t idx) {
-	chunk_t	*chunk;
+// static chunk_t  *find_free_chunk(size_t idx) {
+// 	chunk_t	*chunk;
 
-	chunk = NULL;
-	while (idx < 128) {
-		chunk = get_free_chuk_from_bin(idx);
-		if (chunk != NULL)
-			break;
-		idx++;
-	}
-	return chunk;
-}
+// 	chunk = NULL;
+// 	while (idx < 128) {
+// 		chunk = get_free_chuk_from_bin(idx);
+// 		if (chunk != NULL)
+// 			break;
+// 		idx++;
+// 	}
+// 	return chunk;
+// }
 
-void	_unlink_chunk(chunk_t *chunk) {
+static void _unlink_chunk(chunk_t *chunk) {
 	chunk_t	*next;
 	chunk_t	*prev;
 
@@ -54,28 +53,37 @@ void	_unlink_chunk(chunk_t *chunk) {
 	chunk->free_link = (chunk_pair_t){0};
 }
 
-void	_prepend_chunk_in_bin(chunk_t *chunk) {
+static void _prepend_chunk_in_bin(chunk_t *chunk) {
+    (void)chunk;
+}
 
-};
+static chunk_t  *_get_chunk(arena_t *arena, size_t size) {
+    return NULL;
+}
 
+static void *_create_arena(size_t size) {
+    chunk_t *chunk;
 
-
-void	*__malloc(size_t size, arena_t *arena) {
-    chunk_t	*chunk;
-    size_t	chunk_size;
-
-
-    if (size == 0) {
+    chunk = __mmap(size, PROT_READ | PROT_WRITE);
+    if (chunk == MAP_FAILED) {
         return NULL;
     }
-    if (arena->top_chunk == NULL && !_init_arena(arena)) {
-        return NULL;
-    }
-    chunk_size = mem2chunk(size + sizeof(header_t));
-    chunk = get_free_chunk((chunk_size));
+    chunk->header.size = CHUNK_SIZE(size) | CHUNK_FINUSE | CHUNK_FSMMAP;  
+    return chunk + sizeof(header_t);
+}
+
+static void	*__malloc(size_t size, arena_t *arena) {
+    size_t  chunk_size;
     
-	
-	return NULL;
+    chunk_size = mem2chunk(size + sizeof(header_t));
+    if (size == 0 || size > MMAP_THRESHOLD) {
+        return NULL;
+    } else if (chunk_size > MMAP_MAX) {
+        return  _create_arena(chunk_size);
+    } else if (arena->top_chunk == NULL && !_init_arena(arena)) {
+        return NULL;
+    }
+	return _get_chunk(arena, chunk_size);
 }
 
 void    *malloc(size_t __size) {

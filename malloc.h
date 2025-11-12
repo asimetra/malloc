@@ -12,6 +12,9 @@
 #define SELF_MMAPED(x) ((x) & (1 >> 0))
 #define CHUNK_SIZE(x)  ((x) &  ~(size_t)0b11)
 
+#define CHUNK_FINUSE (1 << 1)  
+#define CHUNK_FSMMAP (1 << 0)
+
 #define mem2chunk(size) ((size + 15) & ~15) // (x + mask) & ~mask
 #define chunk2idx(size) ((size >> 4) - 2) /*(size / 16) - 2 cuz we start at 32 bytes */
 #define idx2chunk(size) (((size) + 2) << 4)
@@ -24,8 +27,8 @@
 typedef struct chunk chunk_t;
 
 typedef struct chunk_pair {
-    struct chunk_t *prev;
-    struct chunk_t *next;
+    chunk_t *prev;
+    chunk_t *next;
 } chunk_pair_t;
 
 typedef struct chunk_header {
@@ -42,18 +45,6 @@ typedef struct arena {
     chunk_t         *top_chunk;
     size_t          size;
 } arena_t;
-
-
-/* Chunk Utils */
-// chunk_t *new_chunk(arena_t *arena, size_t size);
-// chunk_t *find_free_chunk(chunk_t **head);
-
-void    prep_chunk(chunk_t **head, chunk_t *chunk);
-void    remove_chunk(chunk_t **head, chunk_t *chunk);
-
-/* Arena Utils */
-// arena_t *create_arena(size_t size);
-// void    remove_arena(arena_t *arena);
 
 /* Malloc API */
 void    *malloc(size_t size);

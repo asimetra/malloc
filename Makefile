@@ -1,9 +1,6 @@
 NAME    = libmalloc.so
-
 CC      = cc
-CFLAGS  = -Wall -Wextra -Werror -fPIC -shared
-AR      = ar rcs
-
+CFLAGS  = -fPIC -shared
 SRCS    = malloc.c
 OBJS    = $(SRCS:.c=.o)
 
@@ -15,7 +12,6 @@ $(NAME): $(OBJS)
 test : all
 	gcc  test.c -o test -L. -lmalloc
 	
-
 clean:
 	rm -f $(OBJS)
 
